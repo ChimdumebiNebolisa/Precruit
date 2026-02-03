@@ -1,222 +1,189 @@
-# Full Stack Vibe Coding Template
+# Intern Insight MVP
 
-A modern, modular full-stack application starter template with NextJS frontend and Python FastAPI backend, supabase backend for Vibe coding.
+A startup internship hiring-signal tracker. Target roles: SWE, SRE, infra/platform, PM intern.
 
-Contains all the common boilerplate features. Just add the README.md and CONTEXT.md files to AI coding agent's context.
+## Project spec
 
-Dont waste your time and tokens on boilerplate code. Use it to build your app
+The canonical MVP specification is **[docs/spec/Intern_Insight.md](./docs/spec/Intern_Insight.md)**. It defines scope, tracks, scoring, seed list, and delivery plan. Seed list: `data/companies_seed.csv` (columns and ingestion defined in spec).
 
-## 🤖 AI-Powered Development
+## Stack
 
-This template includes comprehensive **Cursor Rules** and **Agent Instructions** to supercharge your AI-assisted development:
-
-### Cursor Rules (`.cursor/rules/`)
-- **Context-aware guidance** that automatically applies based on the files you're editing
-- **Template system** with production-ready code patterns (`@api-endpoint-template`, `@react-component-template`)
-- **Best practices enforcement** for FastAPI, Next.js, Supabase, and LLM integration
-- **Automatic rule application** - no manual setup required
-
-### AGENTS.md
-- **Simplified instructions** for AI coding assistants
-- **Project patterns** and common code examples
-- **Architecture overview** and development standards
-- **Quick reference** for established patterns
-
-### Benefits
-- ⚡ **Faster Development** - Templates and patterns accelerate coding
-- 🎯 **Consistency** - All code follows established patterns
-- 🛡️ **Quality** - Built-in best practices and error handling
-- 📚 **Learning** - New developers quickly understand project structure
-- 🤖 **AI-Optimized** - Designed specifically for AI coding assistants
-
-## Features
-
-### Backend (Python FastAPI)
-- **FastAPI REST API** - Fast, type-checked API development
-- **Supabase Integration**
-  - Authentication (Google, LinkedIn, Email/Password)
-  - Database connectivity
-  - Realtime subscriptions
-  - Storage management
-  - Database migrations
-- **LLM Integration**
-  - OpenAI and Claude support
-  - Abstracted LLM service
-  - Vector embeddings service
-- **Vector Database**
-  - Qdrant integration
-  - Document storage and semantic search
-  - Automatic fallback to local in-memory database
-
-### Frontend (Next.js)
-- **Next.js** - React framework with routing, SSR, and more
-- **Tailwind CSS** - Utility-first CSS framework
-- **Responsive design** - Mobile-first approach
-- **Supabase client** - For auth and data access
-- **Complete auth flows** - Login, signup, password reset
+- **Frontend**: Next.js 14 with TypeScript and Tailwind CSS
+- **Database**: Supabase PostgreSQL with migrations
+- **Authentication**: Supabase Auth
+- **Minimal Scope**: No unnecessary services or dependencies
 
 ## Getting Started
 
 ### Prerequisites
-- Docker and Docker Compose
-- Make
-- Node.js 18+ (for local frontend development)
-- Python 3.10+ (for local backend development)
-- Supabase CLI (for database migrations, install with `brew install supabase/tap/supabase` or see [Supabase CLI docs](https://supabase.com/docs/guides/cli))
+
+- Node.js 18+
+- Supabase CLI (for database migrations)
+- A Supabase project
 
 ### Quick Start
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/humanstack/vibe-coding-boilerplate
-   cd vibe-coding-boilerplate
+   git clone <repository-url>
+   cd InternInsight
    ```
 
-2. Run the first-time setup script to configure your environment:
+2. Install dependencies:
    ```bash
-   ./first-time.sh
+   cd apps/web
+   npm install
    ```
-   This will:
-   - Check for required tools
-   - Guide you through setting up API keys
-   - Generate the necessary .env files
 
-3. Start the development environment:
+3. Set up environment variables:
    ```bash
-   make dev
+   # Create .env.local in apps/web/
+   cp .env.example apps/web/.env.local
+
+   # Edit with your Supabase credentials
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
    ```
 
-4. Access the applications:
+4. Start the development server:
+   ```bash
+   cd apps/web
+   npm run dev
+   ```
+
+5. Access the application:
    - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
-   - API Documentation: http://localhost:8000/docs
 
-## Setup Without Script
+## Project Structure
 
-If you prefer to set up manually:
+```
+InternInsight/
+├── apps/
+│   └── web/                 # Next.js frontend application
+│       ├── app/             # Next.js app directory
+│       ├── components/      # React components
+│       └── services/        # API and Supabase services
+├── packages/
+│   ├── core/                # Scoring logic and shared types (future)
+│   └── ingest/              # ATS adapters for signal sources (future)
+├── supabase/                # Supabase configuration
+│   ├── migrations/          # Database migrations
+│   └── seed.sql             # Database seed data
+├── docs/                    # Documentation
+├── scripts/                 # Utility scripts
+├── .cursor/                 # Cursor AI configuration
+│   └── rules/               # Cursor rules for AI assistance
+├── AGENTS.md                # AI agent instructions
+├── AuthSetup.md             # Authentication setup guide
+└── README.md                # This file
+```
 
-1. Copy the `.env.example` file to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
+## Development
 
-2. Create a frontend environment file:
-   ```bash
-   cp .env.example frontend/.env.local
-   ```
+### Running the App
 
-3. Edit both files to add your API keys for:
-   - Supabase (required for auth)
-   - OpenAI and/or Anthropic (for LLM features)
-   - Qdrant (for vector database features, optional)
+```bash
+cd apps/web
+npm run dev
+```
 
-4. Start the development environment:
-   ```bash
-   make dev
-   ```
+### Building for Production
+
+```bash
+cd apps/web
+npm run build
+npm start
+```
+
+### Linting
+
+```bash
+cd apps/web
+npm run lint
+```
+
+## Database Migrations
+
+### Create a Migration
+
+```bash
+supabase migration new descriptive_name
+```
+
+This creates a new migration file in `supabase/migrations/`. Edit the file with your SQL changes.
+
+### Apply Migrations
+
+```bash
+supabase db push
+```
+
+### Check Migration Status
+
+```bash
+supabase migration list
+```
+
+For more details, see the [Database Migrations Guide](./supabase/README.md).
 
 ## Authentication Setup
 
-For detailed instructions on setting up authentication providers (Google, LinkedIn, GitHub, etc.), see the [Authentication Setup Guide](./AuthSetup.md).
-
-## Structure
-
-```
-/
-├── .cursor/                  # Cursor AI configuration
-│   └── rules/                # Cursor rules for AI assistance
-│       ├── backend/          # Backend-specific rules
-│       ├── frontend/         # Frontend-specific rules
-│       └── templates/        # Code templates
-├── AGENTS.md                 # AI agent instructions
-│
-├── backend/                  # Python FastAPI application
-│   ├── app/                  # Application code
-│   │   ├── api/              # API endpoints
-│   │   ├── core/             # Core functionality
-│   │   ├── models/           # Data models
-│   │   └── services/         # Service layer
-│   │       ├── llm/          # LLM services
-│   │       ├── supabase/     # Supabase services
-│   │       └── vectordb/     # Vector DB services
-│
-├── frontend/                 # Next.js application
-│   ├── app/                  # Next.js app directory
-│   ├── components/           # UI components
-│   ├── services/             # API services
-│
-├── supabase/                 # Supabase configuration
-│   ├── migrations/           # Database migrations
-│   ├── seed.sql              # Database seed data
-│   └── README.md             # Migrations documentation
-│
-├── llm-context/              # Legacy context files (now replaced by Cursor rules)
-├── docker-compose.yml        # Docker configuration
-├── Makefile                  # Project commands
-├── first-time.sh             # Setup script
-├── .gitignore                # Git ignore patterns
-├── .env.example              # Example environment variables
-├── CHANGELOG.md              # Project changelog
-└── FutureImprovements.md     # Future feature roadmap
-```
-
-## Common Tasks
-
-### Development
-
-- Start all services: `make dev`
-- Frontend only: `make dev-frontend`
-- Backend only: `make dev-backend`
-
-### Production
-
-- Start production services: `make prod`
-- Frontend only: `make prod-frontend`
-- Backend only: `make prod-backend`
-
-### Cleanup
-
-- Clean up containers: `make clean`
-
-### Database Migrations
-
-- Create a migration: `make db-migration-new name=create_table`
-- Apply migrations to remote: `make db-apply`
-- List applied migrations: `make db-list`
-- Check pending migrations: `make db-status`
-- Push migrations (same as apply): `make db-push`
-
-See `supabase/README.md` for more details on database migrations.
+For detailed instructions on setting up Supabase authentication, see the [Authentication Setup Guide](./AuthSetup.md).
 
 ## AI Development Support
 
-### Using Cursor Rules
-The project includes comprehensive Cursor rules that automatically provide context-aware guidance:
+This project includes Cursor rules for AI-assisted development:
 
 - **Automatic Application**: Rules apply automatically based on the files you're editing
-- **Template Usage**: Reference templates with `@api-endpoint-template`, `@react-component-template`, `@service-class-template`
-- **Best Practices**: Built-in patterns for FastAPI, Next.js, Supabase, and LLM integration
+- **Template Usage**: Reference templates with `@react-component-template`
+- **Best Practices**: Built-in patterns for Next.js and Supabase
 
-### Using AGENTS.md
-For simpler AI assistance, use the consolidated `AGENTS.md` file that provides:
-- Project overview and architecture
-- Common patterns and examples
-- Development standards and workflows
+For simpler AI assistance, see [AGENTS.md](./AGENTS.md) for consolidated instructions.
 
-## Documentation
+## Folder Responsibilities
 
-- [Cursor Rules Guide](./.cursor/rules/README.md)
-- [AI Agent Instructions](./AGENTS.md)
-- [Authentication Setup Guide](./AuthSetup.md)
-- [Database Migrations](./supabase/README.md)
-- [Project Changelog](./CHANGELOG.md)
-- [Future Improvements](./FutureImprovements.md)
+### `apps/web/`
+Next.js frontend application. Contains all UI components, pages, and client-side logic.
 
-### Legacy Documentation (replaced by Cursor rules)
-- [Backend Context](./llm-context/BACKEND-CONTEXT.md)
-- [Frontend Context](./llm-context/FRONTEND-CONTEXT.md)
-- [Database Migrations Context](./llm-context/DB-MIGRATIONS.md)
-- [Supabase SDK Reference](./llm-context/SUPABASE-CLIENT-SDK.md)
+### `packages/core/` (Future)
+Scoring logic and shared TypeScript types. Will contain the signal scoring algorithms and type definitions.
+
+### `packages/ingest/` (Future)
+ATS adapters for different signal sources. Each adapter will fetch and normalize job postings from different ATS platforms (Greenhouse, Lever, etc.).
+
+### `supabase/`
+Database migrations and seed data. All schema changes should be made through migrations.
+
+### `docs/`
+Project documentation, architecture decisions, and guides.
+
+### `scripts/`
+Utility scripts for development, deployment, or data processing.
+
+## How to Add a New Signal Source
+
+1. **Create adapter in `packages/ingest/`**:
+   - Create a new file for the ATS adapter (e.g., `greenhouse.ts`)
+   - Implement functions to fetch and normalize job postings
+   - Extract relevant signals (role type, requirements, etc.)
+
+2. **Update types in `packages/core/`**:
+   - Define TypeScript types for the signal data
+   - Ensure types match the scoring system requirements
+
+3. **Add to scoring system**:
+   - Update scoring logic in `packages/core/` to handle new signal types
+
+4. **Update database schema** (if needed):
+   - Create migration: `supabase migration new add_signal_source`
+   - Add tables/columns to store new signal data
+   - Apply migration: `supabase db push`
+
+5. **Update frontend** (if needed):
+   - Add UI components to display new signal types
+   - Update dashboard to show new signals
+
+See [AGENTS.md](./AGENTS.md) for more detailed instructions.
 
 ## License
 
