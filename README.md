@@ -6,6 +6,10 @@ A startup internship hiring-signal tracker. Target roles: SWE, SRE, infra/platfo
 
 The canonical MVP specification is **[docs/spec/Intern_Insight.md](./docs/spec/Intern_Insight.md)**. It defines scope, tracks, scoring, seed list, and delivery plan. Seed list: `data/companies_seed.csv` (columns and ingestion defined in spec).
 
+## Milestones
+
+Execution-ready MVP milestones (M1–M3), acceptance tests, guardrails, and repo mapping are in **[docs/milestones/MVP_Milestones.md](./docs/milestones/MVP_Milestones.md)**.
+
 ## Stack
 
 - **Frontend**: Next.js 14 with TypeScript and Tailwind CSS
