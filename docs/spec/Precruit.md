@@ -47,7 +47,7 @@ Start with 4 tracks for MVP. Users can toggle what they care about.
 ## 5.1 Core pages
 
 - Company list: search and filter by track, location (optional), and traffic-light status.
-- Company detail: per-track status, reasons (top signals), and a small history timeline.
+- Company detail: per-track status (traffic-light + Posted badge), reasons (top signals), and a small history timeline.
 - Shortlist: save companies and pick tracks to watch.
 - Alerts: email notifications when a tracked company changes status for a chosen track, or when a relevant posting appears.
 
@@ -90,7 +90,7 @@ Use the following points per company per track. For MVP, use only these point va
 | ATS metadata change (e.g. new departments/offices), 0 postings in track | 25 | Suggests hiring activity. |
 | Recent new posting in adjacent track (e.g. full-time SWE) | 10 | Weak signal; company is hiring. |
 | Careers page content change (optional) | 5 | Basic HTML change detection. |
-| Known ATS type detected | 5 | Greenhouse/Lever/Ashby; enables future signals. |
+| Known ATS type detected | 5 | Greenhouse/Lever/Ashby; enables future signals. When ats_type is unknown, this signal contributes 0 points (not an error). |
 
 - **Track relevance**: Determined by title keyword rules and ATS fields when available (e.g. commitment filters).
 - **Score**: Sum of applicable points, capped at 100. Store top 2–3 signals that drove the score.
@@ -131,6 +131,7 @@ Do not change weights without both; otherwise metrics become incomparable.
 | ats_type | Empty on import; filled after ATS detection: `Greenhouse`, `Lever`, `Ashby`, or `unknown`. |
 | location | Optional; e.g. city, region, or "Remote". |
 
+- **ATS detection**: Best-effort only. `unknown` is a normal, expected outcome for companies not using Greenhouse, Lever, or Ashby.
 - **Ingestion**: MVP loads this CSV (e.g. via script or one-time import); no automated sync of the list itself.
 
 # 9. Architecture and tech stack
@@ -153,7 +154,9 @@ Do not change weights without both; otherwise metrics become incomparable.
 
 ## 9.4 Notifications
 
-- Resend (or similar) for transactional email alerts
+- Resend (or similar) for transactional email alerts.
+- **Alert events**: (1) Status change for a watched company+track. (2) New relevant posting for a watched company+track.
+- **Alert idempotency**: At most one email per idempotency key. Keys: status change = (user_id, company_id, track, event_type=status_change, snapshot_date); new posting = (user_id, company_id, track, event_type=new_posting, posting_external_id). Implementation must check or insert into `alert_log` before sending. `last_notified_at` is optional and secondary.
 
 # 10. MVP delivery plan
 
@@ -167,7 +170,7 @@ Do not change weights without both; otherwise metrics become incomparable.
 
 - Fetch postings daily from supported ATS endpoints (triggered by GitHub Actions cron).
 - Classify postings into tracks using title rules and ATS fields when available.
-- Persist a daily snapshot and per-track status.
+- Persist a daily snapshot and postings only. Per-track status is computed and persisted in Milestone 3.
 
 ## Milestone 3: Scoring, UI, and alerts (week 2)
 

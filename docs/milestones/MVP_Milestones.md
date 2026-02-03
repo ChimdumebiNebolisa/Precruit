@@ -41,7 +41,7 @@ Last updated: February 3, 2026
 
 | Milestone | Goal | Exit criteria | Key deliverables | Risks | Out of scope |
 |-----------|------|---------------|------------------|-------|--------------|
-| **M1** | Track seed list and detect ATS | All seed companies in DB; ATS type (Greenhouse/Lever/Ashby/unknown) and endpoint stored per company | Seed import script/job; ATS detection logic; companies + ATS metadata in Supabase | ATS detection false negatives; careers_url missing | New company discovery; scraping protected sources; ML-based ATS detection |
+| **M1** | Track seed list and detect ATS | All seed companies in DB; ats_type set per company (Greenhouse, Lever, Ashby, or unknown where not detectable); endpoint stored when a supported ATS is detected | Seed import script/job; ATS detection logic; companies + ATS metadata in Supabase | ATS detection false negatives; careers_url missing | New company discovery; scraping protected sources; ML-based ATS detection |
 | **M2** | Daily snapshots and track classification | Daily cron fetches postings; postings classified into 4 tracks; snapshot persisted | GitHub Actions cron workflow; ATS adapters (fetch); posting→track classification; snapshot tables | API rate limits; title noise; endpoint changes | Real-time feeds; more than 4 tracks; resume/application tracking |
 | **M3** | Scoring, UI, and alerts | Per-track score + traffic-light + PostedNow; company list/detail/shortlist pages; email on status change or new posting | Rubric scoring; top 2–3 signals stored; list/detail/filters; shortlist + Resend alerts | Email deliverability; over-scoping UI | Weight changes without spec+changelog; Vercel Cron as default; automated company discovery |
 
@@ -59,7 +59,7 @@ Last updated: February 3, 2026
 
 ### (b) Ingestion tasks
 
-- **ATS detection**: For each company, resolve ATS from careers_url or website_url (e.g. known Greenhouse/Lever/Ashby URL patterns or lightweight probe of public job board endpoints). No scraping of protected or terms-violating sources.
+- **ATS detection**: Best-effort only. For each company, resolve ATS from careers_url or website_url (e.g. known Greenhouse/Lever/Ashby URL patterns or lightweight probe of public job board endpoints). Set `unknown` when not detectable; that is normal for companies not on a supported ATS. No scraping of protected or terms-violating sources.
 - **Token extraction**: Not required in M1; focus on identifying vendor and storing board/API endpoint URL.
 - **Fetch cadence**: One-time (or on-demand) import from CSV; no recurring fetch in M1.
 
@@ -91,13 +91,13 @@ Last updated: February 3, 2026
 
 ## M2: Daily snapshots and track classification
 
-**Goal**: Fetch postings daily from supported ATS endpoints, classify postings into the four tracks, and persist a daily snapshot and per-track status.
+**Goal**: Fetch postings daily from supported ATS endpoints, classify postings into the four tracks, and persist a daily snapshot and postings only. Per-track status (traffic-light + Posted badge) is computed in M3 and persisted in `company_track_scores`.
 
 ### (a) Data model impacts
 
 - **`postings_snapshot`** (or `daily_snapshots`): `id`, `company_id`, `snapshot_date` (date), `raw_response` or `postings_payload` (JSONB, optional), `created_at`. Ensures one snapshot per company per day for cron run.
 - **`postings`** (or equivalent): `id`, `company_id`, `snapshot_id`, `external_id`, `title`, `department`/`commitment` (if available), `track` (enum: SWE Intern | Infra and Platform Intern | SRE Intern | Product Intern), `posted_at` (if available), `url`, `created_at`. Enables “Posted now” and track-level aggregation.
-- **Placeholder**: Optional `company_track_status` table: `company_id`, `track`, `posted_now` (boolean), `posting_count`, `snapshot_date`; can be derived in M3 or materialized here.
+- **Per-track status**: Not materialized in M2. M2 persists snapshots and postings only. Per-track status (traffic-light + Posted badge) is computed on read in M3 and persisted in `company_track_scores`.
 - **Track classification**: Stored on each posting row; classification rules based on title keywords and ATS fields (e.g. commitment/department) per spec §4.
 
 ### (b) Ingestion tasks
@@ -108,7 +108,7 @@ Last updated: February 3, 2026
 
 ### (c) Scoring tasks
 
-- **M2**: Persist “posted now” per company per track (boolean) from presence of at least one classified posting. Full rubric scoring (points, traffic-light) is M3; M2 may store minimal “has_posting” state for each track.
+- **M2**: Do not persist per-track status. `posted_now` and traffic-light are computed in M3 from snapshots and postings.
 
 ### (d) UI tasks
 
@@ -141,8 +141,8 @@ Last updated: February 3, 2026
 - **`company_track_scores`** (or equivalent): `company_id`, `track`, `snapshot_date` (or `computed_at`), `prediction_score` (0–100), `traffic_light` (Green|Yellow|Orange|Red), `posted_now` (boolean), `top_signals` (JSONB or array: 2–3 signal descriptions). Unique per (company_id, track, snapshot_date).
 - **`shortlists`**: `id`, `user_id` (references auth.users), `company_id`, `created_at`. RLS: user can only CRUD own rows.
 - **`shortlist_tracks`** (or embedded): Which tracks the user watches per shortlisted company (e.g. `shortlist_id`, `track`). Enables “notify me for this track.”
-- **`alert_preferences`** or **`subscriptions`**: `user_id`, `company_id`, `track` (optional), preference: “status_change” and/or “new_posting”; `last_notified_at` (optional) to avoid duplicate emails.
-- **`alert_log`** (optional): `id`, `user_id`, `company_id`, `track`, `event_type`, `sent_at` for debugging and idempotency.
+- **`alert_preferences`** or **`subscriptions`**: `user_id`, `company_id`, `track` (optional), preference: “status_change” and/or “new_posting”; `last_notified_at` (optional, secondary to alert_log for deduplication).
+- **`alert_log`**: `id`, `user_id`, `company_id`, `track`, `event_type` (status_change | new_posting), `snapshot_date` (for status_change), `posting_external_id` (for new_posting), `sent_at`. Required for idempotency: check or insert before sending; at most one email per key (status change: user_id, company_id, track, event_type, snapshot_date; new posting: user_id, company_id, track, event_type, posting_external_id).
 
 ### (b) Ingestion tasks
 
@@ -158,15 +158,16 @@ Last updated: February 3, 2026
 ### (d) UI tasks
 
 - **Company list**: Search and filter by track, location (optional), traffic-light status; show “Posted” badge when `posted_now` is true for selected track.
-- **Company detail**: Per-track status (traffic-light + Posted badge), top signals (reasons), small history timeline (optional: previous traffic-light or snapshot dates).
+- **Company detail**: Per-track status (traffic-light + Posted badge), from `company_track_scores`; top signals (reasons), small history timeline (optional: previous traffic-light or snapshot dates).
 - **Shortlist**: Save companies; pick tracks to watch; show shortlist view.
 - **Filters**: Track, location, status (Green/Yellow/Orange/Red), Posted now.
 
 ### (e) Alerting tasks
 
-- **Triggers**: (1) Track status change for a watched company+track (e.g. Green→Yellow, or Red→Green). (2) New relevant posting appears for a watched company+track.
-- **Email**: Send via Resend; one email per user per “event” (state change or new posting); respect shortlist track preferences.
-- **Guardrail**: Shortlist subscription triggers email only on state change or new postings; no spam (e.g. daily digest only if defined in spec; spec says “when … changes … or when a relevant posting appears”).
+- **Events**: (1) Status change event: traffic-light change for a watched company+track (e.g. Green→Yellow, Red→Green). (2) New posting event: a relevant posting appears for a watched company+track.
+- **Idempotency keys**: Status change = (user_id, company_id, track, event_type=status_change, snapshot_date). New posting = (user_id, company_id, track, event_type=new_posting, posting_external_id). At most one email per key.
+- **Email**: Send via Resend; respect shortlist track preferences. Before sending, check or insert into `alert_log`; skip send if a row for that key already exists. At most one email per key (see idempotency keys above).
+- **Guardrail**: Shortlist subscription triggers email only on state change or new postings; no spam. last_notified_at is optional and secondary.
 
 ### (f) Testing / validation checklist
 
@@ -195,7 +196,7 @@ Last updated: February 3, 2026
 
 3. **Shortlist subscription: email only on state change and new postings**
    - **Setup**: User shortlists Company A and selects “SWE Intern” and “Product Intern” to watch.
-   - **Assert**: User receives email when (a) Company A’s SWE Intern status changes (e.g. Red → Green) or (b) a new SWE Intern or Product Intern posting appears for Company A. User does not receive an email when nothing changed (e.g. same status and no new postings). Optional: one email per day per (user, company, track) for “new posting” to avoid multiple emails for same posting.
+   - **Assert**: User receives email when (a) Company A’s SWE Intern status changes (e.g. Red → Green) or (b) a new SWE Intern or Product Intern posting appears for Company A. User does not receive an email when nothing changed (e.g. same status and no new postings). At most one email per idempotency key (status change: user_id, company_id, track, snapshot_date; new posting: user_id, company_id, track, posting_external_id).
 
 ---
 
