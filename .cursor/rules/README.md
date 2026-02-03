@@ -1,6 +1,6 @@
-# Cursor Rules for Vibe Coding Template
+# Cursor Rules for Precruit MVP
 
-This directory contains Cursor rules that provide context-aware guidance for developing with the Vibe Coding Template. These rules help maintain consistency, follow best practices, and accelerate development.
+This directory contains Cursor rules that provide context-aware guidance for developing Precruit. These rules help maintain consistency, follow best practices, and accelerate development.
 
 ## Rule Structure
 
@@ -8,23 +8,16 @@ This directory contains Cursor rules that provide context-aware guidance for dev
 - **`project-overview.mdc`**: Overall project standards and architecture principles (always applied)
 - **`development-workflow.mdc`**: Development workflow, commands, and troubleshooting
 
-### Backend Rules (`backend/`)
-- **`fastapi-standards.mdc`**: FastAPI endpoint patterns and best practices
-- **`supabase-integration.mdc`**: Supabase service usage and patterns
-- **`llm-integration.mdc`**: LLM and embedding service integration
-
 ### Frontend Rules (`frontend/`)
 - **`nextjs-standards.mdc`**: Next.js component patterns and standards
 - **`supabase-auth.mdc`**: Frontend authentication patterns
-- **`api-integration.mdc`**: API client and service integration
+- **`api-integration.mdc`**: Supabase client and service integration
 
 ### Database Rules
 - **`database-migrations.mdc`**: Migration patterns and SQL best practices
 
 ### Templates (`templates/`)
-- **`api-endpoint-template.mdc`**: Complete FastAPI endpoint template
 - **`react-component-template.mdc`**: Complete React component template
-- **`service-class-template.mdc`**: Service class pattern template
 
 ## How Rules Work
 
@@ -38,15 +31,12 @@ Rules are automatically applied based on:
 
 ### Automatic Application
 Rules automatically provide context when you're working with relevant files:
-- Editing Python files in `backend/` → Backend rules apply
-- Editing React components → Frontend rules apply
+- Editing React components in `apps/web/` → Frontend rules apply
 - Working with migrations → Database rules apply
 
 ### Manual Reference
 Reference templates explicitly:
-- `@api-endpoint-template` - Get the FastAPI endpoint template
 - `@react-component-template` - Get the React component template
-- `@service-class-template` - Get the service class template
 
 ### Rule Types
 - **Always**: Applied to all conversations (project overview)
@@ -56,7 +46,7 @@ Reference templates explicitly:
 
 ## Alternative: AGENTS.md
 
-For simpler use cases, the project also includes `AGENTS.md` in the root directory, which provides a consolidated set of instructions without the complexity of multiple rule files.
+For simpler use cases, the project also includes `AGENTS.md` in the root directory, which provides a consolidated set of instructions for Precruit MVP.
 
 ## Benefits
 

@@ -1,10 +1,10 @@
-# Intern Insight MVP - Agent Instructions
+# Precruit MVP - Agent Instructions
 
-**Read [docs/spec/Intern_Insight.md](./docs/spec/Intern_Insight.md) before making changes. Do not change scope without updating the spec.**
+**Read [docs/spec/Precruit.md](./docs/spec/Precruit.md) before making changes. Do not change scope without updating the spec.**
 
-- Any change to scoring weights or thresholds must update `docs/spec/Intern_Insight.md` and append to `docs/spec/weights_changelog.md`.
+- Any change to scoring weights or thresholds must update `docs/spec/Precruit.md` and append to `docs/spec/weights_changelog.md`.
 
-Intern Insight is a startup internship hiring-signal tracker. Target roles: SWE, SRE, infra/platform, PM intern.
+Precruit is a startup internship hiring-signal tracker. Target roles: SWE, SRE, infra/platform, PM intern.
 
 **MVP scope**: Next.js (apps/web) and Supabase only. No separate backend services or new top-level packages unless the spec is updated.
 

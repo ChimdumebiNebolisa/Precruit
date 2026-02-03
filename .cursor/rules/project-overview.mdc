@@ -1,41 +1,42 @@
 ---
-description: Full Stack Vibe Coding Template - Project Overview and Standards
+description: Precruit MVP - Project Overview and Standards
 globs: ["**/*"]
 alwaysApply: true
 ---
 
-# Vibe Coding Template - Project Standards
+# Precruit MVP - Project Standards
 
-This is a modern, modular full-stack application starter template with Next.js frontend and Python FastAPI backend, integrated with Supabase.
+Precruit is a startup internship hiring-signal tracker. Target roles: SWE, SRE, infra/platform, PM intern.
 
 ## Architecture Overview
 
-- **Backend**: Python FastAPI with Supabase integration (auth, database, storage)
 - **Frontend**: Next.js with Tailwind CSS and TypeScript
 - **Database**: Supabase PostgreSQL with migrations
-- **Vector DB**: Qdrant for semantic search
-- **LLM Integration**: OpenAI and Anthropic support
+- **Authentication**: Supabase Auth
+- **Stack**: Next.js + TypeScript + Supabase (minimal scope, no unnecessary services)
 
 ## Core Principles
 
-1. **Type Safety First**: Use TypeScript for frontend, Pydantic models for backend
-2. **Service Layer Pattern**: Abstract external services (Supabase, LLM, Vector DB)
+1. **Type Safety First**: Use TypeScript for all frontend code
+2. **Service Layer Pattern**: Abstract external services (Supabase)
 3. **Environment-based Configuration**: Use .env files for all configuration
-4. **Docker-first Development**: All services containerized
-5. **Migration-driven Database**: All schema changes through Supabase migrations
+4. **Migration-driven Database**: All schema changes through Supabase migrations
+5. **Minimal Scope**: No unnecessary services or dependencies
 
 ## File Organization Standards
 
-- Keep related functionality grouped in service directories
-- Use consistent naming: snake_case for Python, camelCase for TypeScript
-- Place shared types and models in dedicated directories
-- Maintain clear separation between API routes and business logic
+- **apps/web/**: Next.js frontend application
+- **packages/core/**: Scoring logic and shared types (future)
+- **packages/ingest/**: ATS adapters for signal sources (future)
+- **supabase/**: Database migrations and seed data
+- **docs/**: Documentation
+- **scripts/**: Utility scripts
 
 ## Development Workflow
 
-- Use `make dev` to start all services
-- Create database migrations with `make db-migration-new name=description`
-- Apply migrations with `make db-apply`
+- Run `cd apps/web && npm run dev` to start development server
+- Create database migrations with Supabase CLI: `supabase migration new name`
+- Apply migrations: `supabase db push`
 - Follow the established patterns for new features
 
 ## Code Quality Standards
@@ -44,6 +45,6 @@ This is a modern, modular full-stack application starter template with Next.js f
 - Use async/await patterns consistently
 - Include type annotations for all functions
 - Write descriptive commit messages
-- Test API endpoints before committing
+- Test components and pages before committing
 
 When adding new features, follow the established patterns and maintain consistency with existing code structure.

@@ -1,6 +1,6 @@
-# InternInsight MVP – Milestones (Execution-Ready)
+# Precruit MVP – Milestones (Execution-Ready)
 
-Execution-ready milestone plan derived from the canonical spec: [docs/spec/Intern_Insight.md](../spec/Intern_Insight.md).
+Execution-ready milestone plan derived from the canonical spec: [docs/spec/Precruit.md](../spec/Precruit.md).
 
 Last updated: February 3, 2026
 
@@ -202,7 +202,7 @@ Last updated: February 3, 2026
 ## Non-negotiable guardrails
 
 - **No scraping protected sources**: Only use public job board APIs (Greenhouse, Lever, Ashby) and compliant lightweight checks. Do not scrape sites that prohibit it or violate terms of use.
-- **Scoring weights**: Do not change point values or score-to-traffic-light thresholds without (a) updating [docs/spec/Intern_Insight.md](../spec/Intern_Insight.md) and (b) appending a dated entry to [docs/spec/weights_changelog.md](../spec/weights_changelog.md).
+- **Scoring weights**: Do not change point values or score-to-traffic-light thresholds without (a) updating [docs/spec/Precruit.md](../spec/Precruit.md) and (b) appending a dated entry to [docs/spec/weights_changelog.md](../spec/weights_changelog.md).
 - **Cron default**: GitHub Actions cron is the MVP default for scheduled ingestion/scoring. Vercel Cron or other schedulers are out of scope as equal default for MVP.
 - **No automated startup discovery**: Company list is manual only. Seed list is `data/companies_seed.csv`; no automated discovery or bulk import from external directories.
 
@@ -215,7 +215,7 @@ Last updated: February 3, 2026
 | Next.js app, pages, UI, API routes | `apps/web/` |
 | Database schema and migrations | `supabase/migrations/` |
 | Seed company list (manual) | `data/companies_seed.csv` |
-| Canonical spec, rubric, thresholds, weights changelog | `docs/spec/` (e.g. `Intern_Insight.md`, `weights_changelog.md`) |
+| Canonical spec, rubric, thresholds, weights changelog | `docs/spec/` (e.g. `Precruit.md`, `weights_changelog.md`) |
 | Milestone and delivery docs | `docs/milestones/` (e.g. this file) |
 | One-off or recurring scripts (e.g. seed import, cron entrypoint) | `scripts/` (if present or planned) |
 

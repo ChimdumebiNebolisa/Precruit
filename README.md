@@ -1,10 +1,10 @@
-# Intern Insight MVP
+# Precruit MVP
 
 A startup internship hiring-signal tracker. Target roles: SWE, SRE, infra/platform, PM intern.
 
 ## Project spec
 
-The canonical MVP specification is **[docs/spec/Intern_Insight.md](./docs/spec/Intern_Insight.md)**. It defines scope, tracks, scoring, seed list, and delivery plan. Seed list: `data/companies_seed.csv` (columns and ingestion defined in spec).
+The canonical MVP specification is **[docs/spec/Precruit.md](./docs/spec/Precruit.md)**. It defines scope, tracks, scoring, seed list, and delivery plan. Seed list: `data/companies_seed.csv` (columns and ingestion defined in spec).
 
 ## Milestones
 
@@ -30,7 +30,7 @@ Execution-ready MVP milestones (M1–M3), acceptance tests, guardrails, and repo
 1. Clone this repository:
    ```bash
    git clone <repository-url>
-   cd InternInsight
+   cd Precruit
    ```
 
 2. Install dependencies:
@@ -61,7 +61,7 @@ Execution-ready MVP milestones (M1–M3), acceptance tests, guardrails, and repo
 ## Project Structure
 
 ```
-InternInsight/
+Precruit/
 ├── apps/
 │   └── web/                 # Next.js frontend application
 │       ├── app/             # Next.js app directory

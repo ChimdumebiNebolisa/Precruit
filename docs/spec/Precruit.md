@@ -1,4 +1,4 @@
-**InternInsight MVP Spec**
+**Precruit MVP Spec**
 
 _Role-specific early hiring signals for internship hunters (US startups)_
 
@@ -55,8 +55,8 @@ Start with 4 tracks for MVP. Users can toggle what they care about.
 
 **Rule:** "Posted now" is a boolean badge, independent of the traffic-light. The traffic-light applies only to likelihood within 30 days when no relevant posting is live.
 
-- **Posted now**: A boolean badge, independent of the traffic-light. When at least one relevant internship posting is live for that track at that company, set `PostedNow = true` and show a “Posted” badge in the UI. This is not a prediction—it is current state.
-- **Traffic-light (prediction)**: Applies only when no relevant posting is currently live. It represents likelihood of a relevant posting appearing within 30 days. When a posting is live, still compute and store the prediction score for consistency, but the UI emphasizes the “Posted” badge; the traffic-light remains informative (e.g. for “likely to stay open” or future roles).
+- **Posted now**: A boolean badge, independent of the traffic-light. When at least one relevant internship posting is live for that track at that company, set `PostedNow = true` and show a "Posted" badge in the UI. This is not a prediction—it is current state.
+- **Traffic-light (prediction)**: Applies only when no relevant posting is currently live. It represents likelihood of a relevant posting appearing within 30 days. When a posting is live, still compute and store the prediction score for consistency, but the UI emphasizes the "Posted" badge; the traffic-light remains informative (e.g. for "likely to stay open" or future roles).
 
 ## 5.3 Traffic-light meaning (per track, when no posting is live)
 
@@ -106,7 +106,7 @@ Use the following points per company per track. For MVP, use only these point va
 
 ## 7.3 Posted-now rule
 
-If a relevant posting is live for the track: set `PostedNow = true`, still compute and store `PredictionScore`, and show the “Posted” badge in the UI. The traffic-light may still be shown for context but the primary user signal is “Posted.”
+If a relevant posting is live for the track: set `PostedNow = true`, still compute and store `PredictionScore`, and show the "Posted" badge in the UI. The traffic-light may still be shown for context but the primary user signal is "Posted."
 
 ## 7.4 Scoring weight changes
 
@@ -129,7 +129,7 @@ Do not change weights without both; otherwise metrics become incomparable.
 | website_url | Main company website. |
 | careers_url | Careers or jobs page URL (optional; may be detected later). |
 | ats_type | Empty on import; filled after ATS detection: `Greenhouse`, `Lever`, `Ashby`, or `unknown`. |
-| location | Optional; e.g. city, region, or “Remote”. |
+| location | Optional; e.g. city, region, or "Remote". |
 
 - **Ingestion**: MVP loads this CSV (e.g. via script or one-time import); no automated sync of the list itself.
 
