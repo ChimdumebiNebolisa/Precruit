@@ -97,7 +97,7 @@ Last updated: February 3, 2026
 
 - **`postings_snapshot`** (or `daily_snapshots`): `id`, `company_id`, `snapshot_date` (date), `raw_response` or `postings_payload` (JSONB, optional), `created_at`. Ensures one snapshot per company per day for cron run.
 - **`postings`** (or equivalent): `id`, `company_id`, `snapshot_id`, `external_id`, `title`, `department`/`commitment` (if available), `track` (enum: SWE Intern | Infra and Platform Intern | SRE Intern | Product Intern), `posted_at` (if available), `url`, `created_at`. Enables “Posted now” and track-level aggregation.
-- **Per-track status**: Not materialized in M2. M2 persists snapshots and postings only. Per-track status (traffic-light + Posted badge) is computed on read in M3 and persisted in `company_track_scores`.
+- **Per-track status**: Not materialized in M2. M2 persists snapshots and postings only. Per-track status (traffic-light + Posted badge) is computed in M3 and persisted in `company_track_scores`.
 - **Track classification**: Stored on each posting row; classification rules based on title keywords and ATS fields (e.g. commitment/department) per spec §4.
 
 ### (b) Ingestion tasks
@@ -196,7 +196,7 @@ Last updated: February 3, 2026
 
 3. **Shortlist subscription: email only on state change and new postings**
    - **Setup**: User shortlists Company A and selects “SWE Intern” and “Product Intern” to watch.
-   - **Assert**: User receives email when (a) Company A’s SWE Intern status changes (e.g. Red → Green) or (b) a new SWE Intern or Product Intern posting appears for Company A. User does not receive an email when nothing changed (e.g. same status and no new postings). At most one email per idempotency key (status change: user_id, company_id, track, snapshot_date; new posting: user_id, company_id, track, posting_external_id).
+   - **Assert**: User receives email when (a) Company A’s SWE Intern status changes (e.g. Red → Green) or (b) a new SWE Intern or Product Intern posting appears for Company A. User does not receive an email when nothing changed (e.g. same status and no new postings). At most one email per idempotency key (status change: user_id, company_id, track, event_type=status_change, snapshot_date; new posting: user_id, company_id, track, event_type=new_posting, posting_external_id).
 
 ---
 
