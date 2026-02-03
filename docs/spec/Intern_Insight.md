@@ -53,6 +53,8 @@ Start with 4 tracks for MVP. Users can toggle what they care about.
 
 ## 5.2 Posted now vs prediction status
 
+**Rule:** "Posted now" is a boolean badge, independent of the traffic-light. The traffic-light applies only to likelihood within 30 days when no relevant posting is live.
+
 - **Posted now**: A boolean badge, independent of the traffic-light. When at least one relevant internship posting is live for that track at that company, set `PostedNow = true` and show a “Posted” badge in the UI. This is not a prediction—it is current state.
 - **Traffic-light (prediction)**: Applies only when no relevant posting is currently live. It represents likelihood of a relevant posting appearing within 30 days. When a posting is live, still compute and store the prediction score for consistency, but the UI emphasizes the “Posted” badge; the traffic-light remains informative (e.g. for “likely to stay open” or future roles).
 
@@ -79,7 +81,7 @@ Start with a simple, explainable rubric. Iterate after measuring precision.
 
 ## 7.1 Initial scoring rubric (MVP)
 
-Use the following points per company per track. Total score 0–100; then map to traffic-light via thresholds below.
+Use the following points per company per track. For MVP, use only these point values; do not add or change weights without updating the spec. Total score 0–100; then map to traffic-light via thresholds below.
 
 | Signal | Points (max) | Notes |
 | --- | --- | --- |
@@ -109,7 +111,7 @@ If a relevant posting is live for the track: set `PostedNow = true`, still compu
 # 8. Seed list (MVP)
 
 - **Source**: Manually curated list for MVP. No automated discovery.
-- **Location**: `data/companies_seed.csv`.
+- **Location**: `data/companies_seed.csv`. The file is created with headers only and is manually populated; the list is manually curated for MVP.
 - **Columns**:
 
 | Column | Description |
@@ -132,8 +134,7 @@ If a relevant posting is live for the track: set `PostedNow = true`, still compu
 ## 9.2 Backend and jobs
 
 - Next.js API routes (or a small Node/TypeScript service) for ingestion and scoring.
-- **Scheduled runs (MVP)**: GitHub Actions cron (e.g. daily). Single default for MVP to avoid ambiguity.
-- Optional later: Vercel Cron Jobs as an alternative, not required for MVP.
+- **Scheduled runs (MVP)**: GitHub Actions cron (e.g. daily). Single default for MVP to avoid ambiguity. Vercel Cron is a later optional alternative, not an equal choice for MVP.
 - HTTP fetch to ATS endpoints; optional lightweight HTML fetch for careers page.
 
 ## 9.3 Database and auth
