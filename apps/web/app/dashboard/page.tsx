@@ -53,7 +53,7 @@ export default function Dashboard() {
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link href="/" className="font-bold text-xl text-primary-600">
-            Full Stack App
+            Precruit
           </Link>
 
           {user ? (

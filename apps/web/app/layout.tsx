@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Vibe coding Boilerplate Application',
-  description: 'A modern full-stack application with NextJS and FastAPI. Built for Vibe coding',
+  title: 'Precruit',
+  description: 'Early hiring-signal tracking for startup internship roles',
 };
 
 export default function RootLayout({
