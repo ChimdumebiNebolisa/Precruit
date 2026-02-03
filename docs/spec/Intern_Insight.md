@@ -108,6 +108,15 @@ Use the following points per company per track. For MVP, use only these point va
 
 If a relevant posting is live for the track: set `PostedNow = true`, still compute and store `PredictionScore`, and show the “Posted” badge in the UI. The traffic-light may still be shown for context but the primary user signal is “Posted.”
 
+## 7.4 Scoring weight changes
+
+Any change to point values or thresholds requires:
+
+- **(a)** Updating the spec rubric/thresholds (this document).
+- **(b)** Adding a dated entry to `docs/spec/weights_changelog.md`.
+
+Do not change weights without both; otherwise metrics become incomparable.
+
 # 8. Seed list (MVP)
 
 - **Source**: Manually curated list for MVP. No automated discovery.
