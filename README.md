@@ -15,3 +15,5 @@ npm run dev
 ```
 
 The app runs without a database.
+
+**Acceptance tests:** See [docs/acceptance-tests.md](docs/acceptance-tests.md). Run with `npm run accept:m0.3`, `npm run accept:m1.1`, or `npm run accept`.
