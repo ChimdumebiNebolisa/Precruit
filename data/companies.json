@@ -1,0 +1,66 @@
+[
+  {
+    "slug": "acme-corp",
+    "name": "Acme Corp",
+    "hiring_spike_7d": true,
+    "eng_hiring_14d": true,
+    "churn_14d": true,
+    "early_career_language": true
+  },
+  {
+    "slug": "beta-labs",
+    "name": "Beta Labs",
+    "hiring_spike_7d": false,
+    "eng_hiring_14d": false,
+    "churn_14d": false,
+    "early_career_language": false
+  },
+  {
+    "slug": "gamma-inc",
+    "name": "Gamma Inc",
+    "hiring_spike_7d": true,
+    "eng_hiring_14d": true,
+    "churn_14d": false,
+    "early_career_language": false
+  },
+  {
+    "slug": "delta-io",
+    "name": "Delta IO",
+    "hiring_spike_7d": false,
+    "eng_hiring_14d": true,
+    "churn_14d": true,
+    "early_career_language": false
+  },
+  {
+    "slug": "epsilon-tech",
+    "name": "Epsilon Tech",
+    "hiring_spike_7d": false,
+    "eng_hiring_14d": false,
+    "churn_14d": true,
+    "early_career_language": true
+  },
+  {
+    "slug": "zeta-systems",
+    "name": "Zeta Systems",
+    "hiring_spike_7d": true,
+    "eng_hiring_14d": false,
+    "churn_14d": false,
+    "early_career_language": false
+  },
+  {
+    "slug": "eta-ventures",
+    "name": "Eta Ventures",
+    "hiring_spike_7d": false,
+    "eng_hiring_14d": false,
+    "churn_14d": false,
+    "early_career_language": true
+  },
+  {
+    "slug": "theta-works",
+    "name": "Theta Works",
+    "hiring_spike_7d": true,
+    "eng_hiring_14d": false,
+    "churn_14d": false,
+    "early_career_language": true
+  }
+]
