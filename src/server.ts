@@ -1,4 +1,6 @@
+import * as path from "path";
 import express, { Request, Response } from "express";
+import cors from "cors";
 import { loadCompanies } from "./load-companies";
 import { computeFallbackProbability } from "./lib/fallback-formula";
 import { getTrafficLight } from "./lib/traffic-light";
@@ -25,6 +27,9 @@ export function getCompaniesForApi(): CompanyApiItem[] {
 
 const app = express();
 const port = process.env.PORT ?? 3000;
+
+app.use(cors());
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.get("/api/companies", (_req: Request, res: Response) => {
   res.json(getCompaniesForApi());
