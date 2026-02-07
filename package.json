@@ -7,7 +7,8 @@
     "build": "tsc",
     "accept:m0.3": "ts-node scripts/accept-m0.3-loader.ts",
     "accept:m1.1": "ts-node scripts/accept-m1.1-traffic-light.ts",
-    "accept": "npm run accept:m0.3 && npm run accept:m1.1"
+    "accept:m1.3": "ts-node scripts/accept-m1.3-api.ts",
+    "accept": "npm run accept:m0.3 && npm run accept:m1.1 && npm run accept:m1.3"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

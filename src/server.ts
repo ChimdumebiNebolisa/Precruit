@@ -7,12 +7,9 @@ import type { CompanyApiItem } from "./types";
 const FALLBACK_REASON =
   "Fallback scoring used due to invalid AI output.";
 
-const app = express();
-const port = process.env.PORT ?? 3000;
-
-app.get("/api/companies", (_req: Request, res: Response) => {
+export function getCompaniesForApi(): CompanyApiItem[] {
   const companies = loadCompanies();
-  const items: CompanyApiItem[] = companies.map((company) => {
+  return companies.map((company) => {
     const probability = computeFallbackProbability(company);
     const { light, message } = getTrafficLight(probability);
     return {
@@ -24,9 +21,19 @@ app.get("/api/companies", (_req: Request, res: Response) => {
       ai_reason: FALLBACK_REASON,
     };
   });
-  res.json(items);
+}
+
+const app = express();
+const port = process.env.PORT ?? 3000;
+
+app.get("/api/companies", (_req: Request, res: Response) => {
+  res.json(getCompaniesForApi());
 });
 
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server listening on http://localhost:${port}`);
+  });
+}
+
+export { app };
