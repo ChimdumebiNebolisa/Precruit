@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "ts-node -r dotenv/config -e \"console.log('Precruit'); process.exit(0)\"",
-    "build": "tsc"
+    "build": "tsc",
+    "accept:m0.3": "ts-node scripts/accept-m0.3-loader.ts",
+    "accept:m1.1": "ts-node scripts/accept-m1.1-traffic-light.ts",
+    "accept": "npm run accept:m0.3 && npm run accept:m1.1"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -12,6 +15,7 @@
     "openai": "^4.73.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^22.9.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
